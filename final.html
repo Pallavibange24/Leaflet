@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore India - Interactive Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        h1 {
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        #map {
+            height: 80vh;
+            width: 90%;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1>Explore Indian Landmarks</h1>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([23.6102, 78.9629], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        const monumentIcon = L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/1673/1673228.png',
+            iconSize: [35, 35],
+            iconAnchor: [17, 35]
+        });
+
+        const landmarks = [
+            { name: "Taj Mahal", coords: [27.1751, 78.0421], popup: "Iconic white marble mausoleum in Agra, built by Shah Jahan" },
+            { name: "Red Fort", coords: [28.6562, 77.2410], popup: "Historic fort in Delhi, former main residence of Mughal emperors" },
+            { name: "Gateway of India", coords: [18.9220, 72.8347], popup: "Colonial-era arch monument in Mumbai overlooking Arabian Sea" },
+            { name: "Amer Fort", coords: [26.9855, 75.8513], popup: "Magnificent fort palace in Jaipur with artistic Hindu elements" }
+        ];
+
+        landmarks.forEach(landmark => {
+            L.marker(landmark.coords, { icon: monumentIcon })
+                .addTo(map)
+                .bindPopup(`<b>${landmark.name}</b><br>${landmark.popup}`);
+        });
+
+        const goldenTriangle = [
+            [[28.6562, 77.2410], [27.1751, 78.0421]],
+            [[27.1751, 78.0421], [26.9855, 75.8513]],
+            [[26.9855, 75.8513], [28.6562, 77.2410]]
+        ];
+        goldenTriangle.forEach(route => {
+            L.polyline(route, { color: '#FF5722', weight: 4, dashArray: '10, 10' }).addTo(map);
+        });
+
+        const mumbaiCoast = [
+            [18.9500, 72.8180],
+            [18.9400, 72.8300],
+            [18.9200, 72.8347],
+            [18.9000, 72.8400],
+            [18.8900, 72.8250]
+        ];
+        L.polygon(mumbaiCoast, { color: '#2196F3', fillColor: '#64B5F6', fillOpacity: 0.3 }).addTo(map).bindPopup('Mumbai Coastal Region');
+
+        const cityConnections = [
+            [24.5713, 73.6915],
+            [22.7196, 75.8577],
+            [16.5782, 80.3620]
+        ];
+        L.polyline(cityConnections, { color: '#4CAF50', weight: 3, dashArray: '5,5' }).addTo(map).bindPopup('Central-South Cities Connection');
+    </script>
+</body>
+</html>
